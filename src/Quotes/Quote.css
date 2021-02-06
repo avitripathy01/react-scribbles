@@ -1,0 +1,6 @@
+.Quote{
+    text-align: center;
+    margin: auto 80px auto 80px;
+    border: 1px solid rgb(23, 128, 63);
+    box-sizing: border-box;
+}
