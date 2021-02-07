@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-
+import { dispatchSignUp } from '../state/authActionCreators';
 class SignUp extends Component {
 
     state = {
@@ -64,11 +64,7 @@ const mapAuthStoreToProps = (storeState) => {
 }
 const mapDispatchActionstoProps = (dispatch) => {
     return {
-        createNewUser: (uname, pass) => dispatch(
-
-            { type: 'SIGNUP', payLoad: { userName: uname, password: pass } }
-
-        )
+        createNewUser: (uname, pass) => dispatch(dispatchSignUp(uname, pass))
     };
 }
 

@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
 import { getActiveUser } from '../utilities/localstorage';
+import { dispatchAddNewQuote } from '../state/authActionCreators';
 
 
 import './AddQuote.css';
@@ -13,20 +14,23 @@ class AddQuote extends Component {
         user: '',
         author: '',
         quote: '',
-        featured: ''
+        featured: '',
+        isAuth: false
     };
 
     componentDidMount() {
-        console.log('Mounting');
-        const user = getActiveUser();
-        if (!this.state.user && user !== '') {
-            this.setState({ user: user });
+        if (!(this.state.isAuth || this.state.user !== '')) {
+            const user = getActiveUser();
+            if (user && user !== "")
+                this.setState({ isAuth: user && user !== "", user: user });
+            else
+                this.props.history.push('/');
         }
     }
 
     static getDerivedStateFromProps(props, state) {
         if (props.successRedirect) {
-            this.props.history.push('/profile');
+            props.history.push('/profile');
         }
         return state;
     }
@@ -42,15 +46,13 @@ class AddQuote extends Component {
         this.setState({ featured: value });
     }
     saveQuote = (e) => {
-
-        //saveQuoteLS({name: 'anon', quote: 'Work is worship', isFeatured: true});
         this.props.history.push('/');
 
     }
 
     render() {
         console.log('Rendering [AddQuote] ');
-        const saveButton = { backgroundColor: 'green' };
+        // const saveButton = { backgroundColor: 'green' };
         const marginStyle = { margin: '10px' };
         return (
             <div>
@@ -91,20 +93,18 @@ class AddQuote extends Component {
     }
 }
 
-
-const mapDispatchActionstoProps = (dispatch) => {
+const mapAuthStoreToProps = (storeState) => {
     return {
-        addQuote: (userName, author, quote, isFeatured) => dispatch(
-
-            {
-                type: 'ADDQUOTE',
-                payLoad: {
-                    user: userName,
-                    quote: { author: author, quote: quote, isFeatured: isFeatured }
-                }
-            }
-        )
+        successRedirect: storeState.successRedirect,
     };
 }
 
-export default connect(null, mapDispatchActionstoProps)(withRouter(AddQuote));
+const mapDispatchActionstoProps = (dispatch) => {
+    return {
+        addQuote: (userName, author, quote, isFeatured) =>
+            dispatch(dispatchAddNewQuote(userName, { author: author, quote: quote, isFeatured: isFeatured })
+            )
+    };
+}
+
+export default connect(mapAuthStoreToProps, mapDispatchActionstoProps)(withRouter(AddQuote));

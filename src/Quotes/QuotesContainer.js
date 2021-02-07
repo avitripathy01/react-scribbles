@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Quote from './Quote';
 import ActionElements from '../ActionElements/ActionElements';
 import { getActiveUser } from '../utilities/localstorage';
+import { dispatchSignout } from '../state/authActionCreators';
 
 import './QuotesContainer.css';
 
@@ -129,11 +130,8 @@ const mapStoreStateToProps = (state) => {
 }
 const mapDispatchActionstoProps = (dispatch) => {
     return {
-        signout: (uname) => dispatch(
-
-            { type: 'SIGNOUT', payLoad: { userName: uname } }
-
-        )
+        signout: (uname) => dispatch(dispatchSignout(uname))
+ 
     };
 }
 

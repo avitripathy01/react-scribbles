@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
+import {dispatchSignIn} from '../state/authActionCreators'
+
 class SignIn extends Component {
 
     state = {
@@ -16,7 +18,6 @@ class SignIn extends Component {
         }else if(props.signInFailed){
             newState = {...state, invalidCredentials: true}
         }
-        
         return newState;
     }
 
@@ -66,11 +67,7 @@ const mapAuthStoreToProps =(storeState) =>{
 }
 const mapDispatchActionstoProps = (dispatch) =>{
     return {
-        login : (uname, pass) => dispatch(
-           
-            {type:'SIGNIN', payLoad :{userName: uname, password:pass}}
-            
-            )
+        login : (uname, pass) => dispatch(dispatchSignIn(uname, pass))
     };
 }
 
