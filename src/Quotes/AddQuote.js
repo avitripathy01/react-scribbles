@@ -80,7 +80,7 @@ class AddQuote extends Component {
                     <div className="form-example" >
                         <button
                             onClick={this.props.addQuote.bind(this, this.state.user, this.state.author, this.state.quote, this.state.featured)}
-                            style={saveButton}>Add Quote</button>
+                            className="Button">Add Quote</button>
                     </div>
 
 

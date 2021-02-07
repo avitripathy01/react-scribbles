@@ -64,7 +64,7 @@ class QuotesContainer extends Component {
     }
 
     addUserQuote = () => {
-        (this.props.authStatus || this.state.isAuth) ? this.props.history.push('/add-quote') :
+        (this.props.authStatus || this.state.isAuth) ? this.props.history.push('/add-qoute') :
             this.signUpClickHandler();
     }
 
