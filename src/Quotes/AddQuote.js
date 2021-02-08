@@ -18,21 +18,15 @@ class AddQuote extends Component {
         isAuth: false
     };
 
-    componentDidMount() {
-        if (!(this.state.isAuth || this.state.user !== '')) {
-            const user = getActiveUser();
-            if (user && user !== "")
-                this.setState({ isAuth: user && user !== "", user: user });
-            else
-                this.props.history.push('/');
-        }
-    }
+
 
     static getDerivedStateFromProps(props, state) {
-        if (props.successRedirect) {
-            props.history.push('/profile');
+        if (!props.authStatus) {
+            const user = getActiveUser();
+            if (!user)
+                props.history.push('/signup');
         }
-        return state;
+        return null;;
     }
 
     onAuthorChangeHandler = (event) => {
@@ -95,6 +89,7 @@ class AddQuote extends Component {
 
 const mapAuthStoreToProps = (storeState) => {
     return {
+        authStatus: storeState.isAuthenticated,
         successRedirect: storeState.successRedirect,
     };
 }

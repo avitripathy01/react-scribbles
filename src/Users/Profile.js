@@ -10,15 +10,16 @@ class Profile extends Component {
         user: ''
     };
 
-    componentDidMount() {
-        if (!(this.state.isAuth || this.state.user !== '')) {
+    static getDerivedStateFromProps(props, state) {
+        if (!props.isAuth) {
             const user = getActiveUser();
-            if (user && user !== "")
-                this.setState({ isAuth: user && user !== "", user: user });
-            else
-                this.props.history.push('/');
+            if (!user) {
+                props.history.push('/');
+            }
         }
+        return state;
     }
+
 
     render() {
         console.log('Rendering [Profile]');
@@ -29,7 +30,7 @@ class Profile extends Component {
 
 const mapAuthStoreToProps = (storeState) => {
     return {
-        isAuth: storeState.isAuth
+        isAuth: storeState.isAuthenticated
     };
 }
 
