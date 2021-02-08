@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {dispatchSignIn} from '../state/authActionCreators'
+import { dispatchSignIn } from '../state/authActionCreators'
 
 class SignIn extends Component {
 
@@ -9,19 +9,24 @@ class SignIn extends Component {
         username: '',
         password: '',
         invalidCredentials: false
+    };
+
+    static getDerivedStateFromProps(props, state) {
+
+        if (props.authStatus && props.successRedirect) {
+            props.history.push('/profile');
+        }
+        return state;
     }
 
-    static getDerivedStateFromProps(props, state){
-        let newState = state;
-        if(props.successRedirect){
-            props.history.push('/profile');
-        }else if(props.signInFailed){
-            newState = {...state, invalidCredentials: true}
+    componentDidUpdate() {
+        if (!this.state.invalidCredentials && this.props.signInFailed) {
+            this.setState({ invalidCredentials: true });
         }
-        return newState;
     }
 
     signIn = (event) => {
+        event.preventDefault();
         this.props.login(this.state.username, this.state.password);
 
     }
@@ -33,11 +38,12 @@ class SignIn extends Component {
         this.setState({ password: event.target.value });
     }
     render() {
-        console.log('Rendering SignIn ', this.props );
+        const signInFailure = this.state.invalidCredentials && `Invalid Credentials or User doesn't exist!!`;
+        console.log('Rendering [SignIn]');
         return (
             <div>
-                {this.state.invalidCredentials && `Invalid Credentials or User doesn't exist!!`}
-                <form name="signup" className="form-example"  >
+                {signInFailure}
+                <form name="signup" className="form-example">
                     <div className="form-example">
                         <label htmlFor="username">UserName</label>
                         <input type="text" name="username" onChange={this.nameChangeHandler} value={this.state.username} />
@@ -59,15 +65,16 @@ class SignIn extends Component {
     }
 }
 
-const mapAuthStoreToProps =(storeState) =>{
+const mapAuthStoreToProps = (storeState) => {
     return {
-        successRedirect : storeState.successRedirect,
-        signInFailed : storeState.signInFailure
+        authStatus: storeState.isAuthenticated,
+        successRedirect: storeState.successRedirect,
+        signInFailed: storeState.signInFailure
     };
 }
-const mapDispatchActionstoProps = (dispatch) =>{
+const mapDispatchActionstoProps = (dispatch) => {
     return {
-        login : (uname, pass) => dispatch(dispatchSignIn(uname, pass))
+        login: (uname, pass) => dispatch(dispatchSignIn(uname, pass))
     };
 }
 

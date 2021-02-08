@@ -10,15 +10,19 @@ class SignUp extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        let newState = state;
-        if (props.successRedirect) {
+
+        if (props.authStatus && props.successRedirect) {
             props.history.push('/profile');
         }
-
-        return newState;
+        return state;
     }
-
+    componentDidUpdate() {
+        if (this.props.failureSignUp && !this.state.invalidCredentials) {
+            this.setState({ invalidCredentials: true });
+        }
+    }
     signup = (event) => {
+        event.preventDefault();
         this.props.createNewUser(this.state.username, this.state.password);
 
     }
@@ -30,10 +34,11 @@ class SignUp extends Component {
         this.setState({ password: event.target.value });
     }
     render() {
-        console.log('Rendering SignIn ', this.props);
+        const signUpFailure = this.state.invalidCredentials && `User already  exist!!`;
+        console.log('Rendering [SignUp]');
         return (
             <div>
-
+                {signUpFailure}
                 <form name="signup" className="form-example"  >
                     <div className="form-example">
                         <label htmlFor="username">UserName</label>
@@ -58,8 +63,9 @@ class SignUp extends Component {
 
 const mapAuthStoreToProps = (storeState) => {
     return {
+        authStatus: storeState.isAuthenticated,
         successRedirect: storeState.successRedirect,
-
+        failureSignUp: storeState.signInFailure
     };
 }
 const mapDispatchActionstoProps = (dispatch) => {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -11,7 +11,7 @@ import './QuotesContainer.css';
 
 
 
-class QuotesContainer extends Component {
+class QuotesContainer extends PureComponent {
 
     constructor() {
         super();
@@ -54,9 +54,14 @@ class QuotesContainer extends Component {
     }
 
     componentDidMount() {
-        if (!(this.state.isAuth || this.state.user !== '')) {
+
+        if (!this.state.isAuth && !this.props.authStatus) {
             const user = getActiveUser();
-            this.setState({ isAuth: user && user !== "", userName: user });
+            if (user) {
+                console.log('Mounting');
+                this.setState({ isAuth: true, user: user });
+            }
+
         }
     }
     toggleDisplayQuotes = () => {
@@ -65,16 +70,15 @@ class QuotesContainer extends Component {
     }
 
     addUserQuote = () => {
-        (this.props.authStatus || this.state.isAuth) ? this.props.history.push('/add-qoute') :
-            this.signUpClickHandler();
+        this.props.history.push('/add-qoute');
     }
 
     signUpClickHandler = () => {
-        this.props.history.push('signup');
+        this.props.history.replace('signup');
     }
 
     signInClickHandler = () => {
-        this.props.history.push('signin');
+        this.props.history.replace('signin');
     }
 
     gotoProfilePage = () => {
@@ -88,7 +92,7 @@ class QuotesContainer extends Component {
     }
 
     render() {
-        console.log('Rendering [QuoteContainer] : Authentication status:: ', (this.props.authStatus || this.state.isAuth));
+        console.log('Rendering [QuoteContainer] ');
         let quotes = [];
         let showButtonText = 'Show All Quotes';
 
@@ -131,7 +135,7 @@ const mapStoreStateToProps = (state) => {
 const mapDispatchActionstoProps = (dispatch) => {
     return {
         signout: (uname) => dispatch(dispatchSignout(uname))
- 
+
     };
 }
 

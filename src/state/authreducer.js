@@ -1,45 +1,53 @@
-const intialState = {isAuthenticated : false, userName : ''};
+const intialState = { isAuthenticated: false, userName: '' };
 
 const authReducer = (authState = intialState, action) => {
-    console.log('[authReducer] Received Action :',action);
-    switch(action.type){
+    console.log('[authReducer] Received Action :', action);
+    switch (action.type) {
 
         case 'SIGNIN_SUCCCES':
         case 'SIGNUP_SUCCCES':
-        {
-            authState =  {...authState,  
-                            authenticated: action.status, 
-                            userName: action.username,
-                            successRedirect:action.status, 
-                            signInFailure: !action.status};
-            break;
-        }
+            {
+                authState = {
+                    ...authState,
+                    isAuthenticated: action.status,
+                    userName: action.username,
+                    successRedirect: action.status,
+                    signInFailure: !action.status
+                };
+                break;
+            }
         case 'SIGNIN_FAILURE':
         case 'SIGNUP_FAILURE':
-        {
-            authState =  {...authState,  
-                            authenticated: action.status, 
-                            successRedirect:action.status, 
-                            signInFailure: action.status};
-            break;
-        }
+            {
+                authState = {
+                    ...authState,
+                    isAuthenticated: action.status,
+                    successRedirect: action.status,
+                    signInFailure: !action.status
+                };
+                break;
+            }
         case 'SIGNOUT':
-        {  
-            authState =  {...authState, 
-                            userName:'',  
-                            isAuthenticated: false, 
-                            successRedirect:true};   
-            break;
-        }
+            {
+                authState = {
+                    ...authState,
+                    userName: '',
+                    isAuthenticated: false,
+                    successRedirect: true
+                };
+                break;
+            }
         case 'ADDQUOTE':
-        {
-            authState =  {...authState, 
-                            successRedirect: true};    
-            break;
-        }
-        default: authState =  {...authState};
+            {
+                authState = {
+                    ...authState,
+                    successRedirect: true
+                };
+                break;
+            }
+        default: authState = { ...authState };
     }
- 
+
     return authState;
 
 }
