@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
 import { getActiveUser } from '../utilities/localstorage';
-import { dispatchAddNewQuote } from '../state/authActionCreators';
+import { dispatchAddNewQuote } from '../saga-state/authActionCreators';
 
 
 import './AddQuote.css';

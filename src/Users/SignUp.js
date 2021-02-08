@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { dispatchSignUp } from '../state/authActionCreators';
+import { dispatchSignUp } from '../saga-state/authActionCreators';
 class SignUp extends Component {
 
     state = {

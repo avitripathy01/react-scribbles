@@ -3,17 +3,19 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
 
-import authReducer from './state/authreducer';
+import createMidllewareSaga from 'redux-saga';
+
+import authReducer from './saga-state/authreducer';
 
 import './index.css';
 import App from './App';
 
+import { authSagaSignIn, authSagaSignUp, authSagaAddQuote, authSagaSignOut } from './saga-state/authSagaGen';
 
 
-
-const store = createStore(authReducer, applyMiddleware(thunk));
+const sagaMiddleware = createMidllewareSaga();
+const store = createStore(authReducer, applyMiddleware(sagaMiddleware));
 ReactDOM.render(
 
   <React.StrictMode>
@@ -28,6 +30,12 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+
+sagaMiddleware.run(authSagaSignIn);
+sagaMiddleware.run(authSagaSignOut);
+sagaMiddleware.run(authSagaSignUp);
+sagaMiddleware.run(authSagaAddQuote);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

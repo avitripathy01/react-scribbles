@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Quote from './Quote';
 import ActionElements from '../ActionElements/ActionElements';
 import { getActiveUser } from '../utilities/localstorage';
-import { dispatchSignout } from '../state/authActionCreators';
+import { dispatchSignout } from '../saga-state/authActionCreators';
 
 import './QuotesContainer.css';
 

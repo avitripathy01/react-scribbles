@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { dispatchSignIn } from '../state/authActionCreators'
+import { dispatchSignIn } from '../saga-state/authActionCreators'
 
 class SignIn extends Component {
 
