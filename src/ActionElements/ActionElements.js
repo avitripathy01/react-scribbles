@@ -2,7 +2,7 @@ import React from 'react';
 
 const actionElements = (props) => {
 
-
+    console.log('Rendering ActionElements');
     const genericActions = <React.Fragment>
         <button className="Button" onClick={props.toggleQuote}>{props.toggleQuoteButtonText}</button>
         <button className="Button" onClick={props.addQuote}>Add New Quote</button>

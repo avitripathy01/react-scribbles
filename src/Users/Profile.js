@@ -1,31 +1,24 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getActiveUser } from '../utilities/localstorage';
 
-class Profile extends Component {
+const Profile = (props) => {
 
-    state = {
-        isAuth: false,
-        user: ''
-    };
 
-    static getDerivedStateFromProps(props, state) {
+    useEffect(() => {
         if (!props.isAuth) {
             const user = getActiveUser();
             if (!user) {
                 props.history.push('/');
             }
         }
-        return state;
-    }
+    }, [props]);
 
+    console.log('Rendering [Profile]');
+    const hereText = <Link to="/">here</Link>
+    return (<p>Welcome user !! Click {hereText} for Home</p>);
 
-    render() {
-        console.log('Rendering [Profile]');
-        const hereText = <Link to="/">here</Link>
-        return (<p>Welcome user !! Click {hereText} for Home</p>);
-    }
 }
 
 const mapAuthStoreToProps = (storeState) => {

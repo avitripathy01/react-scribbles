@@ -33,7 +33,8 @@ const authReducer = (authState = intialState, action) => {
                     ...authState,
                     userName: '',
                     isAuthenticated: false,
-                    successRedirect: true
+                    successRedirect: true,
+                    signInFailure: false
                 };
                 break;
             }

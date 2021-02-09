@@ -1,64 +1,61 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { dispatchSignUp } from '../state/authActionCreators';
-class SignUp extends Component {
+const SignUp = (props) => {
 
-    state = {
-        username: '',
-        password: '',
-        invalidCredentials: false
-    }
+    const [uname, setUname] = useState('');
+    const [pass, setPass] = useState('');
+    const [userExists, setUserExists] = useState(false);
 
-    static getDerivedStateFromProps(props, state) {
-
+    useEffect(() => {
         if (props.authStatus && props.successRedirect) {
             props.history.push('/profile');
         }
-        return state;
-    }
-    componentDidUpdate() {
-        if (this.props.failureSignUp && !this.state.invalidCredentials) {
-            this.setState({ invalidCredentials: true });
+    }, [props]);
+
+    useEffect(() => {
+        if (props.failureSignUp && !userExists) {
+            setUserExists(true);
         }
-    }
-    signup = (event) => {
+    }, [userExists, props]);
+
+    const signup = (event) => {
         event.preventDefault();
-        this.props.createNewUser(this.state.username, this.state.password);
-
+        props.createNewUser(uname, pass);
     }
 
-    nameChangeHandler = (event) => {
-        this.setState({ username: event.target.value });
+    const nameChangeHandler = (event) => {
+        setUname(event.target.value);
     }
-    passwordChangeHandler = (event) => {
-        this.setState({ password: event.target.value });
+    const passwordChangeHandler = (event) => {
+        setPass(event.target.value);
     }
-    render() {
-        const signUpFailure = this.state.invalidCredentials && `User already  exist!!`;
-        console.log('Rendering [SignUp]');
-        return (
-            <div>
-                {signUpFailure}
-                <form name="signup" className="form-example"  >
-                    <div className="form-example">
-                        <label htmlFor="username">UserName</label>
-                        <input type="text" name="username" onChange={this.nameChangeHandler} value={this.state.username} />
-                    </div>
-                    <div className="form-example">
-                        <label htmlFor="password">Password</label>
-                        <input type="text" name="password" onChange={this.passwordChangeHandler} value={this.state.password} />
-                    </div>
 
-                    <div className="form-example" >
-                        <button className="Button" onClick={this.signup} >SignUp</button>
-                    </div>
+    const signUpFailure = userExists && `User already  exist!!`;
+    console.log('Rendering [SignUp]');
+    return (
+        <div>
+            {signUpFailure}
+            <form name="signup" className="form-example"  >
+                <div className="form-example">
+                    <label htmlFor="username">UserName</label>
+                    <input type="text" name="username" onChange={nameChangeHandler} value={uname} />
+                </div>
+                <div className="form-example">
+                    <label htmlFor="password">Password</label>
+                    <input type="text" name="password" onChange={passwordChangeHandler} value={pass} />
+                </div>
+
+                <div className="form-example" >
+                    <button className="Button" onClick={signup} >SignUp</button>
+                </div>
 
 
-                </form>
+            </form>
 
-            </div>
-        );
-    }
+        </div>
+    );
+
 }
 
 const mapAuthStoreToProps = (storeState) => {
